@@ -1,16 +1,20 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IFlash } from '../flash.model';
 
 @Component({
   selector: 'app-flash',
   templateUrl: './flash.component.html',
-  styleUrls: ['./flash.component.css']
+  styleUrls: ['./flash.component.css'],
 })
 export class FlashComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
+  ngOnInit(): void {}
 
-  ngOnInit(): void {
+  @Output() onToggleCard = new EventEmitter();
+  
+  toggleCard() {
+    this.onToggleCard.emit(this.flash.id);
   }
 
   @Input() flash: IFlash = {
@@ -18,6 +22,5 @@ export class FlashComponent implements OnInit {
     question: 'React to Angular',
     answer: 'No Reaction :)',
     show: false,
-    };
-
+  };
 }
