@@ -13,6 +13,11 @@ function getRandomNumber() {
 export class AppComponent {
   title = 'flash-card-game';
 
+  editing = false;
+  editingId: number;
+  
+  
+
   flashs: IFlash[] = [
     {
       question: 'Question 1',
@@ -39,7 +44,23 @@ export class AppComponent {
   }
 
   handleToggleCard(id: number) {
-    const flash = this.flashs.find(flash => flash.id === id);
+    const flash = this.flashs.find((flash) => flash.id === id);
     flash.show = !flash.show;
-    }
+  }
+
+  handleDelete(id: number) {    
+    const flashId = this.flashs.findIndex((flash) => flash.id === id);
+
+    this.flashs.splice(flashId, 1);
+  }
+
+  handleEdit(id: number) {
+    this.editing = true;
+    this.editingId = id;    
+  }
+
+  handleRememberedChange({ id, flag }) {
+    const flash = this.flashs.find((flash) => flash.id === id);
+    flash.remembered = flag;
+  }
 }
