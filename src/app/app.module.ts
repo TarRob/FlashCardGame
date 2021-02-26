@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FlashComponent } from './flash/flash.component';
 import { FormsModule } from '@angular/forms';
+import { FlashService } from './flash.service';
 
 @NgModule({
   declarations: [
