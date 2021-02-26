@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { IFlash } from './flash.model';
 
 function getRandomNumber() {
@@ -11,12 +12,18 @@ function getRandomNumber() {
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
+  @ViewChild('flashForm', { static: true }) flashForm: NgForm;
+
   title = 'flash-card-game';
 
   editing = false;
   editingId: number;
-  
-  
+
+  flash = {
+    question: '',
+    answer: '',
+    show: false
+  };
 
   flashs: IFlash[] = [
     {
@@ -48,19 +55,51 @@ export class AppComponent {
     flash.show = !flash.show;
   }
 
-  handleDelete(id: number) {    
+  handleDelete(id: number) {
     const flashId = this.flashs.findIndex((flash) => flash.id === id);
 
     this.flashs.splice(flashId, 1);
   }
 
-  handleEdit(id: number) {
+  handleEdit(id: number): void {
     this.editing = true;
-    this.editingId = id;    
+    this.editingId = id;
+    const flash = this.flashs.find((flash) => flash.id === id);
+    this.flash.question = flash.question;
+    this.flash.answer = flash.answer;
+  }
+
+  handleUpdate() {
+    const flash = this.flashs.find((flash) => flash.id === this.editingId);
+    flash.question = this.flash.question;
+    flash.answer = this.flash.answer;
+    this.handleCancel();
+  }
+
+  handleCancel() {
+    this.editing = false;
+    this.editingId = undefined;
+    this.handleClear();
   }
 
   handleRememberedChange({ id, flag }) {
     const flash = this.flashs.find((flash) => flash.id === id);
     flash.remembered = flag;
+  }
+
+  handleSubmit(): void {
+    this.flashs.push({
+      id: getRandomNumber(),
+      ...this.flash,
+    });
+    this.handleClear();
+  }
+  handleClear() {
+    this.flash = {
+      question: '',
+      answer: '',
+      show: false
+    };
+    this.flashForm.reset();
   }
 }
